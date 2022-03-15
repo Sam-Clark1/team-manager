@@ -222,7 +222,7 @@ const generateIntern = () => {
     }
   ]).then(data => {
     const {name, id, email, school, confirm} = data;
-    employees.push(new Manager(name, id, email, school));
+    employees.push(new Intern(name, id, email, school));
     confirm ? questions() : createPage();
   })
 };
