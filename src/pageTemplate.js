@@ -7,13 +7,13 @@ const generateCards = data => {
         let specificAttrValue;
 
         if (github){
-            specificAttr = 'Github';
+            specificAttr = 'Github:';
             specificAttrValue = `<a href=https://github.com/${github}>${github}</a>`
         } else if (school) {
-            specificAttr = 'School';
+            specificAttr = 'School:';
             specificAttrValue = school;
         }else {
-            specificAttr = 'Office Number';
+            specificAttr = 'Office Number:';
             specificAttrValue = officeNumber;
         };
 

@@ -7,25 +7,6 @@ const generatePage = require('./src/pageTemplate');
 
 var employees = [];
 
-const questions = () => {
-  return inquirer.prompt([
-    {
-      type: 'list',
-      name: 'role',
-      message: 'What is the role of this employee?',
-      choices: ['Manager', 'Engineer', 'Intern'],
-    },
-  ]).then(({role}) => {
-    if(role === 'Manager'){
-      generateManager();
-    } else if(role === 'Engineer'){
-      generateEngineer();
-    } else{
-      generateIntern();
-    };
-  });  
-};
-
 const generateManager = () => {
   return inquirer.prompt([
     {
@@ -80,17 +61,29 @@ const generateManager = () => {
           }
         }
     },
-    {
-      type: 'confirm',
-      name: 'confirm',
-      message: 'Would you like to enter another employees info?',
-      default: false
-    }
   ]).then(data => {
-    const {name, id, email, officeNumber, confirm} = data;
+    const {name, id, email, officeNumber, } = data;
     employees.push(new Manager(name, id, email, officeNumber));
-    confirm ? questions() : createPage();
   });
+};
+
+const generateEmployees = () => {
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'role',
+      message: 'What is the role of this employee?',
+      choices: ['Engineer', 'Intern', 'Exit'],
+    },
+  ]).then(({role}) => {
+    if(role === 'Engineer'){
+      generateEngineer();
+    } else if(role === 'Intern'){
+      generateIntern();
+    } else{
+      createPage()
+    };
+  });  
 };
 
 const generateEngineer = () => {
@@ -156,7 +149,7 @@ const generateEngineer = () => {
   ]).then(data => {
     const {name, id, email, github, confirm} = data;
     employees.push(new Engineer(name, id, email, github));
-    confirm ? questions() : createPage();
+    confirm ? generateEmployees() : createPage();
   });
 };
 
@@ -223,7 +216,7 @@ const generateIntern = () => {
   ]).then(data => {
     const {name, id, email, school, confirm} = data;
     employees.push(new Intern(name, id, email, school));
-    confirm ? questions() : createPage();
+    confirm ? generateEmployees() : createPage();
   })
 };
 
@@ -261,5 +254,5 @@ const copyFile = () => {
     });
   });
 };
-
-questions();
+generateManager()
+.then(generateEmployees);
