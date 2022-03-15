@@ -1,57 +1,246 @@
-var inquirer = require('inquirer');
+const inquirer = require('inquirer');
 const fs = require('fs');
-const Engineer = require('./Engineer');
-// const generatePage = require('index.html'); //what file to assign here?
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const Manager = require('./lib/Manager');
+const generatePage = require('./src/pageTemplate');
 
-const questions = [
+var employees = [];
+
+const questions = () => {
+  return inquirer.prompt([
     {
       type: 'list',
-      name: 'employeeType',
-      message: 'What employee do you want add?',
-      choices: ['Manager', 'Engineer', 'Employee', 'Intern'],
+      name: 'role',
+      message: 'What is the role of this employee?',
+      choices: ['Manager', 'Engineer', 'Intern'],
     },
-  ];
+  ]).then(({role}) => {
+    if(role === 'Manager'){
+      generateManager();
+    } else if(role === 'Engineer'){
+      generateEngineer();
+    } else{
+      generateIntern();
+    };
+  });  
+};
 
-function writeToFile(fileName, data) {
-    // const pageHTML = generatePage(data);
-    const html = `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        ${JSON.stringify(data)}
-    </body>
-    </html>`
-    
-    fs.writeFile(fileName, html, err => {
-        if (err) throw err;
-        console.log(err);
-        console.log('Page complete! Check out index.html to see the output!');
-    });
-}
-
-function init() {
-    inquirer
-      .prompt(questions)
-      .then((answers) => {
-        console.log('answers????:', answers)
-        if (answers.employeeType === 'Engineer') {
-            const engineer = new Engineer('Noah', '1', 'noah@gmail.com', 'noahking27', 'Engineer')
-            console.log('engineer?????', engineer)
-            writeToFile('index.html', engineer)
-        } else if(answers.employeeType === 'Manager') {
-
+const generateManager = () => {
+  return inquirer.prompt([
+    {
+      type: 'text',
+        name: 'name',
+        message: "Please enter manager's name.",
+        validate: nameInput => {
+          if (nameInput) {
+              return true;
+          } else {
+              console.log('Please enter a name.');
+              return false;
+          }
         }
-        // writeToFile('index.html', answers)
-      })
-      .catch((error) => {
-        console.log(error)
+    }, 
+    {
+      type: 'text',
+        name: 'id',
+        message: "Please enter manager's ID number.",
+        validate: idInput => {
+          if (!isNaN(idInput)) {
+            return true;
+          } else {
+            console.log('Please enter a valid ID(erase current input).');
+            return false;
+          }
+        }
+    }, 
+    {
+      type: 'text',
+        name: 'email',
+        message: "Please enter manager's email.",
+        validate: emailInput => {
+          if (emailInput) {
+            return true;
+          } else {
+            console.log('Please enter an email.');
+            return false;
+          }
+        }
+    },
+    {
+      type: 'text',
+        name: 'officeNumber',
+        message: "Please enter manager's office number.",
+        validate: officeInput => {
+          if (!isNaN(officeInput)) {
+            return true;
+          } else {
+            console.log('Please enter a valid office number.');
+            return false;
+          }
+        }
+    },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Would you like to enter another employees info?',
+      default: false
+    }
+  ]).then(data => {
+    console.log(data)
+    employees.push(new Manager(data));
+    return data
+  })
+};
+
+const generateEngineer = () => {
+  return inquirer.prompt([
+    {
+      type: 'text',
+        name: 'name',
+        message: "Please enter engineer's name.",
+        validate: nameInput => {
+          if (nameInput) {
+              return true;
+          } else {
+              console.log('Please enter a name.');
+              return false;
+          }
+        }
+    }, 
+    {
+      type: 'text',
+        name: 'id',
+        message: "Please enter engineer's ID number.",
+        validate: idInput => {
+          if (!isNaN(idInput)) {
+            return true;
+          } else {
+            console.log('Please enter a valid ID(erase current input).');
+            return false;
+          }
+        }
+    }, 
+    {
+      type: 'text',
+        name: 'email',
+        message: "Please enter engineer's email.",
+        validate: emailInput => {
+          if (emailInput) {
+            return true;
+          } else {
+            console.log('Please enter an email.');
+            return false;
+          }
+        }
+    },
+    {
+      type: 'text',
+        name: 'github',
+        message: "Please enter engineer's GitHub username.",
+        validate: githubInput => {
+          if (githubInput) {
+            return true;
+          } else {
+            console.log('Please enter their GitHub username.');
+            return false;
+          }
+        }
+    },
+  ]).then(data => {
+    console.log(data)
+    return data
+  })
+};
+
+const generateIntern = () => {
+  return inquirer.prompt([
+    {
+      type: 'text',
+        name: 'name',
+        message: "Please enter intern's name.",
+        validate: nameInput => {
+          if (nameInput) {
+              return true;
+          } else {
+              console.log('Please enter a name.');
+              return false;
+          }
+        }
+    }, 
+    {
+      type: 'text',
+        name: 'id',
+        message: "Please enter intern's ID number.",
+        validate: idInput => {
+          if (!isNaN(idInput)) {
+            return true;
+          } else {
+            console.log('Please enter a valid ID(erase current input).');
+            return false;
+          }
+        }
+    }, 
+    {
+      type: 'text',
+        name: 'email',
+        message: "Please enter intern's email.",
+        validate: emailInput => {
+          if (emailInput) {
+            return true;
+          } else {
+            console.log('Please enter an email.');
+            return false;
+          }
+        }
+    },
+    {
+      type: 'text',
+        name: 'school',
+        message: "Please enter intern's school.",
+        validate: schoolInput=> {
+          if (schoolInput) {
+            return true;
+          } else {
+            console.log('Please enter their school.');
+            return false;
+          }
+        }
+    },
+  ]).then(data => {
+    console.log(data)
+    return data
+  })
+};
+
+const writeFile = fileContent => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('./dist/index.html', fileContent, err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve({
+        ok: true,
+        message: 'File created!'
       });
-  }
-  
-  init();
-  
+    });
+  });
+};
+
+const copyFile = () => {
+  return new Promise((resolve, reject) => {
+    fs.copyFile('./src/style.css', './dist/style.css', err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve({
+        ok: true,
+        message: 'Stylesheet created!'
+      });
+    });
+  });
+};
+
+questions()

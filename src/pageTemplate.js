@@ -52,7 +52,7 @@ const generateCards = data => {
 };
 
 
-const pageTemplate = data => {
+module.exports = data => {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -81,5 +81,3 @@ const pageTemplate = data => {
 </html>
     `
 };
-
-module.exports = pageTemplate;
