@@ -2,18 +2,19 @@ const generateCards = data => {
     let cardsArray = [];
 
     data.forEach(employee => {
+        const {name, id, email, role, github, officeNumber, school} = employee;
         let specificAttr = '';
         let specificAttrValue;
 
-        if (employee.github){
-            specificAttr = 'Github'
-            specificAttrValue = employee.github
-        } else if (employee.school) {
-            specificAttr = 'School'
-            specificAttrValue = employee.school
+        if (github){
+            specificAttr = 'Github';
+            specificAttrValue = `<a href=https://github.com/${github}>${github}</a>`
+        } else if (school) {
+            specificAttr = 'School';
+            specificAttrValue = school;
         }else {
-            specificAttr = 'Office Number'
-            specificAttrValue = employee.officeNumber
+            specificAttr = 'Office Number';
+            specificAttrValue = officeNumber;
         };
 
         let card = `
@@ -21,20 +22,19 @@ const generateCards = data => {
             <div class="card">
                 <div class="card-header has-background-info">
                     <p class="card-header-title has-text-white is-size-4">
-                        ${employee.name}
+                        ${name}
                     </p>
                     <p class="card-header-title has-text-white is-size-5">
-                        ${employee.role}
+                        ${role}
                     </p>
                 </div>
                 <div class="card-content">
                     <p class="content is-size-5">
-                        ID: </br>
-                        ${employee.id} 
+                        ID:  ${id} 
                     </p>
                     <p class="content is-size-5">
                         Email: </br>
-                        <a href="mailto:${employee.email}">${employee.email}</a>
+                        <a href="mailto:${email}">${email}</a>
                     </p>
                     <p class="content is-size-5">
                         ${specificAttr} </br>

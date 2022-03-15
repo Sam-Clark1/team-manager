@@ -87,10 +87,10 @@ const generateManager = () => {
       default: false
     }
   ]).then(data => {
-    console.log(data)
-    employees.push(new Manager(data));
-    return data
-  })
+    const {name, id, email, officeNumber, confirm} = data;
+    employees.push(new Manager(name, id, email, officeNumber));
+    confirm ? questions() : createPage();
+  });
 };
 
 const generateEngineer = () => {
@@ -147,10 +147,17 @@ const generateEngineer = () => {
           }
         }
     },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Would you like to enter another employees info?',
+      default: false
+    }
   ]).then(data => {
-    console.log(data)
-    return data
-  })
+    const {name, id, email, github, confirm} = data;
+    employees.push(new Engineer(name, id, email, github));
+    confirm ? questions() : createPage();
+  });
 };
 
 const generateIntern = () => {
@@ -207,10 +214,21 @@ const generateIntern = () => {
           }
         }
     },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: 'Would you like to enter another employees info?',
+      default: false
+    }
   ]).then(data => {
-    console.log(data)
-    return data
+    const {name, id, email, school, confirm} = data;
+    employees.push(new Manager(name, id, email, school));
+    confirm ? questions() : createPage();
   })
+};
+
+const createPage = () => {
+writeFile(generatePage(employees));
 };
 
 const writeFile = fileContent => {
@@ -225,6 +243,7 @@ const writeFile = fileContent => {
         message: 'File created!'
       });
     });
+    copyFile();
   });
 };
 
@@ -243,4 +262,4 @@ const copyFile = () => {
   });
 };
 
-questions()
+questions();
